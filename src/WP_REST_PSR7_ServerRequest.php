@@ -27,7 +27,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *
      * @return array
      */
-    public function getServerParams()
+    public function getServerParams(): array
     {
         return $this->serverParams;
     }
@@ -42,7 +42,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *
      * @return array
      */
-    public function getCookieParams()
+    public function getCookieParams(): array
     {
         return $this->cookieParams;
     }
@@ -65,7 +65,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *
      * @return static
      */
-    public function withCookieParams(array $cookies)
+    public function withCookieParams(array $cookies): static
     {
         $clone               = clone $this;
         $clone->cookieParams = $cookies;
@@ -85,7 +85,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *
      * @return array
      */
-    public function getQueryParams()
+    public function getQueryParams(): array
     {
         return $this->get_query_params();
     }
@@ -113,7 +113,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *
      * @return static
      */
-    public function withQueryParams(array $query)
+    public function withQueryParams(array $query): static
     {
         $clone                = clone $this;
         $clone->params['GET'] = $query;
@@ -133,7 +133,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      * @return array An array tree of UploadedFileInterface instances; an empty
      *     array MUST be returned if no data is present.
      */
-    public function getUploadedFiles()
+    public function getUploadedFiles(): array
     {
         return $this->get_file_params();
     }
@@ -150,7 +150,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      * @return static
      * @throws \InvalidArgumentException if an invalid structure is provided.
      */
-    public function withUploadedFiles(array $uploadedFiles)
+    public function withUploadedFiles(array $uploadedFiles): static
     {
         $clone = clone $this;
         $clone->params['FILES'] = $uploadedFiles;
@@ -206,7 +206,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      * @throws \InvalidArgumentException if an unsupported argument type is
      *     provided.
      */
-    public function withParsedBody($data)
+    public function withParsedBody($data): static
     {
         $clone                 = clone $this;
         $clone->params['POST'] = $data;
@@ -225,7 +225,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *
      * @return array Attributes derived from the request.
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->get_attributes();
     }
@@ -269,7 +269,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *
      * @return static
      */
-    public function withAttribute($name, $value)
+    public function withAttribute($name, $value): static
     {
         $clone                    = clone $this;
         $clone->attributes[$name] = $value;
@@ -293,7 +293,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *
      * @return static
      */
-    public function withoutAttribute($name)
+    public function withoutAttribute($name): static
     {
         $clone = clone $this;
         unset($clone->attributes[$name]);
@@ -301,3 +301,4 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
         return $clone;
     }
 }
+

@@ -3,7 +3,7 @@
 
 namespace WPRestApi\PSR7;
 
-
+use League\Uri\UriResolver;
 use Psr\Http\Message\UriInterface;
 
 class RequestUri implements UriInterface
@@ -116,7 +116,7 @@ class RequestUri implements UriInterface
             $uri .= $scheme . ':';
         }
 
-        if ($authority != ''|| $scheme === 'file') {
+        if ($authority != '' || $scheme === 'file') {
             $uri .= '//' . $authority;
         }
 
@@ -146,7 +146,7 @@ class RequestUri implements UriInterface
     public static function isDefaultPort(UriInterface $uri)
     {
         return $uri->getPort() === null
-               || (isset(self::$defaultPorts[$uri->getScheme()]) && $uri->getPort() === self::$defaultPorts[$uri->getScheme()]);
+            || (isset(self::$defaultPorts[$uri->getScheme()]) && $uri->getPort() === self::$defaultPorts[$uri->getScheme()]);
     }
 
     /**
@@ -200,9 +200,9 @@ class RequestUri implements UriInterface
     public static function isAbsolutePathReference(UriInterface $uri)
     {
         return $uri->getScheme() === ''
-               && $uri->getAuthority() === ''
-               && isset($uri->getPath()[0])
-               && $uri->getPath()[0] === '/';
+            && $uri->getAuthority() === ''
+            && isset($uri->getPath()[0])
+            && $uri->getPath()[0] === '/';
     }
 
     /**
@@ -218,8 +218,8 @@ class RequestUri implements UriInterface
     public static function isRelativePathReference(UriInterface $uri)
     {
         return $uri->getScheme() === ''
-               && $uri->getAuthority() === ''
-               && (!isset($uri->getPath()[0]) || $uri->getPath()[0] !== '/');
+            && $uri->getAuthority() === ''
+            && (!isset($uri->getPath()[0]) || $uri->getPath()[0] !== '/');
     }
 
     /**
@@ -241,27 +241,12 @@ class RequestUri implements UriInterface
             $uri = UriResolver::resolve($base, $uri);
 
             return ($uri->getScheme() === $base->getScheme())
-                   && ($uri->getAuthority() === $base->getAuthority())
-                   && ($uri->getPath() === $base->getPath())
-                   && ($uri->getQuery() === $base->getQuery());
+                && ($uri->getAuthority() === $base->getAuthority())
+                && ($uri->getPath() === $base->getPath())
+                && ($uri->getQuery() === $base->getQuery());
         }
 
         return $uri->getScheme() === '' && $uri->getAuthority() === '' && $uri->getPath() === '' && $uri->getQuery() === '';
-    }
-
-    /**
-     * Removes dot segments from a path and returns the new path.
-     *
-     * @param string $path
-     *
-     * @return string
-     *
-     * @deprecated since version 1.4. Use UriResolver::removeDotSegments instead.
-     * @see UriResolver::removeDotSegments
-     */
-    public static function removeDotSegments($path)
-    {
-        return UriResolver::removeDotSegments($path);
     }
 
     /**
@@ -371,12 +356,12 @@ class RequestUri implements UriInterface
         return $uri;
     }
 
-    public function getScheme()
+    public function getScheme(): string
     {
         return $this->scheme;
     }
 
-    public function getAuthority()
+    public function getAuthority(): string
     {
         $authority = $this->host;
         if ($this->userInfo !== '') {
@@ -390,37 +375,37 @@ class RequestUri implements UriInterface
         return $authority;
     }
 
-    public function getUserInfo()
+    public function getUserInfo(): string
     {
         return $this->userInfo;
     }
 
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
 
-    public function getPort()
+    public function getPort(): int|null
     {
         return $this->port;
     }
 
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
 
-    public function getQuery()
+    public function getQuery(): string
     {
         return $this->query;
     }
 
-    public function getFragment()
+    public function getFragment(): string
     {
         return $this->fragment;
     }
 
-    public function withScheme($scheme)
+    public function withScheme($scheme): static
     {
         $scheme = $this->filterScheme($scheme);
 
@@ -436,7 +421,7 @@ class RequestUri implements UriInterface
         return $new;
     }
 
-    public function withUserInfo($user, $password = null)
+    public function withUserInfo($user, $password = null): static
     {
         $info = $user;
         if ($password != '') {
@@ -454,7 +439,7 @@ class RequestUri implements UriInterface
         return $new;
     }
 
-    public function withHost($host)
+    public function withHost($host): static
     {
         $host = $this->filterHost($host);
 
@@ -469,7 +454,7 @@ class RequestUri implements UriInterface
         return $new;
     }
 
-    public function withPort($port)
+    public function withPort($port): static
     {
         $port = $this->filterPort($port);
 
@@ -485,7 +470,7 @@ class RequestUri implements UriInterface
         return $new;
     }
 
-    public function withPath($path)
+    public function withPath($path): static
     {
         $path = $this->filterPath($path);
 
@@ -500,7 +485,7 @@ class RequestUri implements UriInterface
         return $new;
     }
 
-    public function withQuery($query)
+    public function withQuery($query): static
     {
         $query = $this->filterQueryAndFragment($query);
 
@@ -514,7 +499,7 @@ class RequestUri implements UriInterface
         return $new;
     }
 
-    public function withFragment($fragment)
+    public function withFragment($fragment): static
     {
         $fragment = $this->filterQueryAndFragment($fragment);
 
@@ -688,10 +673,10 @@ class RequestUri implements UriInterface
         } elseif (isset($this->path[0]) && $this->path[0] !== '/') {
             @trigger_error(
                 'The path of a URI with an authority must start with a slash "/" or be empty. Automagically fixing the URI ' .
-                'by adding a leading slash to the path is deprecated since version 1.4 and will throw an exception instead.',
+                    'by adding a leading slash to the path is deprecated since version 1.4 and will throw an exception instead.',
                 E_USER_DEPRECATED
             );
-            $this->path = '/'. $this->path;
+            $this->path = '/' . $this->path;
             //throw new \InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
         }
     }

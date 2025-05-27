@@ -18,16 +18,41 @@ class BodyStream implements StreamInterface
     /** @var array Hash of readable and writable stream types */
     private static $readWriteHash = [
         'read' => [
-            'r' => true, 'w+' => true, 'r+' => true, 'x+' => true, 'c+' => true,
-            'rb' => true, 'w+b' => true, 'r+b' => true, 'x+b' => true,
-            'c+b' => true, 'rt' => true, 'w+t' => true, 'r+t' => true,
-            'x+t' => true, 'c+t' => true, 'a+' => true
+            'r' => true,
+            'w+' => true,
+            'r+' => true,
+            'x+' => true,
+            'c+' => true,
+            'rb' => true,
+            'w+b' => true,
+            'r+b' => true,
+            'x+b' => true,
+            'c+b' => true,
+            'rt' => true,
+            'w+t' => true,
+            'r+t' => true,
+            'x+t' => true,
+            'c+t' => true,
+            'a+' => true
         ],
         'write' => [
-            'w' => true, 'w+' => true, 'rw' => true, 'r+' => true, 'x+' => true,
-            'c+' => true, 'wb' => true, 'w+b' => true, 'r+b' => true,
-            'x+b' => true, 'c+b' => true, 'w+t' => true, 'r+t' => true,
-            'x+t' => true, 'c+t' => true, 'a' => true, 'a+' => true
+            'w' => true,
+            'w+' => true,
+            'rw' => true,
+            'r+' => true,
+            'x+' => true,
+            'c+' => true,
+            'wb' => true,
+            'w+b' => true,
+            'r+b' => true,
+            'x+b' => true,
+            'c+b' => true,
+            'w+t' => true,
+            'r+t' => true,
+            'x+t' => true,
+            'c+t' => true,
+            'a' => true,
+            'a+' => true
         ]
     ];
 
@@ -95,7 +120,7 @@ class BodyStream implements StreamInterface
         }
     }
 
-    public function getContents()
+    public function getContents(): string
     {
         $contents = stream_get_contents($this->stream);
 
@@ -106,7 +131,7 @@ class BodyStream implements StreamInterface
         return $contents;
     }
 
-    public function close()
+    public function close(): void
     {
         if (isset($this->stream)) {
             if (is_resource($this->stream)) {
@@ -130,7 +155,10 @@ class BodyStream implements StreamInterface
         return $result;
     }
 
-    public function getSize()
+    /**
+     * {@inheritDoc}
+     */
+    public function getSize(): ?int
     {
         if ($this->size !== null) {
             return $this->size;
@@ -154,27 +182,42 @@ class BodyStream implements StreamInterface
         return null;
     }
 
-    public function isReadable()
+    /**
+     * {@inheritDoc}
+     */
+    public function isReadable(): bool
     {
         return $this->readable;
     }
 
-    public function isWritable()
+    /**
+     * {@inheritDoc}
+     */
+    public function isWritable(): bool
     {
         return $this->writable;
     }
 
-    public function isSeekable()
+    /**
+     * {@inheritDoc}
+     */
+    public function isSeekable(): bool
     {
         return $this->seekable;
     }
 
-    public function eof()
+    /**
+     * {@inheritDoc}
+     */
+    public function eof(): bool
     {
         return !$this->stream || feof($this->stream);
     }
 
-    public function tell()
+    /**
+     * {@inheritDoc}
+     */
+    public function tell(): int
     {
         $result = ftell($this->stream);
 
@@ -185,22 +228,31 @@ class BodyStream implements StreamInterface
         return $result;
     }
 
-    public function rewind()
+    /**
+     * {@inheritDoc}
+     */
+    public function rewind(): void
     {
         $this->seek(0);
     }
 
-    public function seek($offset, $whence = SEEK_SET)
+    /**
+     * {@inheritDoc}
+     */
+    public function seek($offset, $whence = SEEK_SET): void
     {
         if (!$this->seekable) {
             throw new \RuntimeException('Stream is not seekable');
         } elseif (fseek($this->stream, $offset, $whence) === -1) {
             throw new \RuntimeException('Unable to seek to stream position '
-                                        . $offset . ' with whence ' . var_export($whence, true));
+                . $offset . ' with whence ' . var_export($whence, true));
         }
     }
 
-    public function read($length)
+    /**
+     * {@inheritDoc}
+     */
+    public function read($length): string
     {
         if (!$this->readable) {
             throw new \RuntimeException('Cannot read from non-readable stream');
@@ -221,7 +273,10 @@ class BodyStream implements StreamInterface
         return $string;
     }
 
-    public function write($string)
+    /**
+     * {@inheritDoc}
+     */
+    public function write($string): int
     {
         if (!$this->writable) {
             throw new \RuntimeException('Cannot write to a non-writable stream');
@@ -253,3 +308,4 @@ class BodyStream implements StreamInterface
         return isset($meta[$key]) ? $meta[$key] : null;
     }
 }
+

@@ -44,7 +44,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *
      * @return string HTTP protocol version.
      */
-    public function getProtocolVersion()
+    public function getProtocolVersion(): string
     {
         return $this->protocol;
     }
@@ -63,7 +63,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *
      * @return static
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): static
     {
         $clone           = clone $this;
         $clone->protocol = $version;
@@ -96,7 +96,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *     key MUST be a header name, and each value MUST be an array of strings
      *     for that header.
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -110,7 +110,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *     name using a case-insensitive string comparison. Returns false if
      *     no matching header name is found in the message.
      */
-    public function hasHeader($name)
+    public function hasHeader($name): bool
     {
         return isset($this->headers[$name]);
     }
@@ -130,7 +130,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *    header. If the header does not appear in the message, this method MUST
      *    return an empty array.
      */
-    public function getHeader($name)
+    public function getHeader($name): array
     {
         $header = $this->get_header_as_array($name);
 
@@ -157,7 +157,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *    concatenated together using a comma. If the header does not appear in
      *    the message, this method MUST return an empty string.
      */
-    public function getHeaderLine($name)
+    public function getHeaderLine($name): string
     {
         $line = $this->get_header($name);
 
@@ -180,7 +180,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      * @return static
      * @throws \InvalidArgumentException for invalid header names or values.
      */
-    public function withHeader($name, $value)
+    public function withHeader($name, $value): static
     {
         $clone = clone $this;
         $clone->set_header($name, $value);
@@ -205,7 +205,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      * @return static
      * @throws \InvalidArgumentException for invalid header names or values.
      */
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): static
     {
         $clone = clone $this;
         $clone->add_header($name, $value);
@@ -226,7 +226,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *
      * @return static
      */
-    public function withoutHeader($name)
+    public function withoutHeader($name): static
     {
         $clone = clone $this;
         $clone->remove_header($name);
@@ -239,9 +239,9 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *
      * @return StreamInterface Returns the body as a stream.
      */
-    public function getBody()
+    public function getBody(): StreamInterface
     {
-        if ( ! isset($this->bodyStream)) {
+        if (! isset($this->bodyStream)) {
             $stream = fopen('php://temp', 'r+');
             if ($this->body !== '') {
                 fwrite($stream, $this->body);
@@ -268,7 +268,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      * @return static
      * @throws \InvalidArgumentException When the body is not valid.
      */
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): static
     {
         if ($body === $this->bodyStream) {
             return $this;
@@ -297,7 +297,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *
      * @return string
      */
-    public function getRequestTarget()
+    public function getRequestTarget(): string
     {
         if (null !== $this->requestTarget) {
             return $this->requestTarget;
@@ -309,7 +309,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
         }
 
         $query = $this->uri->getQuery();
-        if ( ! empty($query)) {
+        if (! empty($query)) {
             $target .= "?{$query}";
         }
 
@@ -335,10 +335,10 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *
      * @return static
      */
-    public function withRequestTarget($requestTarget)
+    public function withRequestTarget($requestTarget): static
     {
         if (strpos($requestTarget, ' ')) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Invalid request target provided; cannot contain whitespace'
             );
         }
@@ -354,7 +354,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *
      * @return string Returns the request method.
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -375,7 +375,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      * @return static
      * @throws \InvalidArgumentException for invalid HTTP methods.
      */
-    public function withMethod($method)
+    public function withMethod($method): static
     {
         $clone         = clone $this;
         $clone->method = $method;
@@ -392,7 +392,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      * @return UriInterface Returns a UriInterface instance
      *     representing the URI of the request.
      */
-    public function getUri()
+    public function getUri(): UriInterface
     {
         return $this->uri;
     }
@@ -429,7 +429,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
      *
      * @return static
      */
-    public function withUri(UriInterface $uri, $preserveHost = false)
+    public function withUri(UriInterface $uri, $preserveHost = false): static
     {
         if ($uri === $this->uri) {
             return $this;
@@ -438,8 +438,8 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
         $clone      = clone $this;
         $clone->uri = $uri;
 
-        if ( ! $preserveHost) {
-           $clone->updateHostFromUri();
+        if (! $preserveHost) {
+            $clone->updateHostFromUri();
         }
 
         return $clone;

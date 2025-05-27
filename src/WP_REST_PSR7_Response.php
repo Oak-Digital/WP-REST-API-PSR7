@@ -125,7 +125,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *
      * @return string HTTP protocol version.
      */
-    public function getProtocolVersion()
+    public function getProtocolVersion(): string
     {
         return $this->protocol;
     }
@@ -144,7 +144,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *
      * @return static
      */
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): static
     {
         $clone           = clone $this;
         $clone->protocol = $version;
@@ -177,7 +177,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *     key MUST be a header name, and each value MUST be an array of strings
      *     for that header.
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->get_headers();
     }
@@ -191,7 +191,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *     name using a case-insensitive string comparison. Returns false if
      *     no matching header name is found in the message.
      */
-    public function hasHeader($name)
+    public function hasHeader($name): bool
     {
         return isset($this->headers[$name]);
     }
@@ -211,7 +211,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *    header. If the header does not appear in the message, this method MUST
      *    return an empty array.
      */
-    public function getHeader($name)
+    public function getHeader($name): array
     {
         return isset($this->headers[$name]) ? $this->headers[$name] : [];
     }
@@ -236,7 +236,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *    concatenated together using a comma. If the header does not appear in
      *    the message, this method MUST return an empty string.
      */
-    public function getHeaderLine($name)
+    public function getHeaderLine($name): string
     {
         return implode(',', $this->getHeader($name));
     }
@@ -257,7 +257,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      * @return static
      * @throws \InvalidArgumentException for invalid header names or values.
      */
-    public function withHeader($name, $value)
+    public function withHeader($name, $value): static
     {
         $clone = clone $this;
         $clone->header($name, $value);
@@ -282,7 +282,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      * @return static
      * @throws \InvalidArgumentException for invalid header names or values.
      */
-    public function withAddedHeader($name, $value)
+    public function withAddedHeader($name, $value): static
     {
         $clone = clone $this;
         $clone->header($name, $value, false);
@@ -303,7 +303,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *
      * @return static
      */
-    public function withoutHeader($name)
+    public function withoutHeader($name): static
     {
         $clone = clone $this;
         unset($clone->headers[$name]);
@@ -316,9 +316,9 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *
      * @return StreamInterface Returns the body as a stream.
      */
-    public function getBody()
+    public function getBody(): StreamInterface
     {
-        if ( ! isset($this->bodyStream)) {
+        if (! isset($this->bodyStream)) {
             $stream = fopen('php://temp', 'r+');
             if ($this->data !== '') {
                 fwrite($stream, $this->data);
@@ -345,7 +345,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      * @return static
      * @throws \InvalidArgumentException When the body is not valid.
      */
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): static
     {
         if ($body === $this->bodyStream) {
             return $this;
@@ -366,7 +366,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      *
      * @return int Status code.
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->get_status();
     }
@@ -393,7 +393,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      * @return static
      * @throws \InvalidArgumentException For invalid status code arguments.
      */
-    public function withStatus($code, $reasonPhrase = '')
+    public function withStatus($code, $reasonPhrase = ''): static
     {
         $clone         = clone $this;
         $clone->status = (int)$code;
@@ -420,17 +420,18 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      * @link http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
      * @return string Reason phrase; must return an empty string if none present.
      */
-    public function getReasonPhrase()
+    public function getReasonPhrase(): string
     {
         return $this->reasonPhrase;
     }
 
     public function get_data()
     {
-        if ( isset($this->bodyStream) ) {
+        if (isset($this->bodyStream)) {
             return json_decode($this->bodyStream);
         } else {
             return parent::get_data();
         }
     }
 }
+
