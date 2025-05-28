@@ -1,5 +1,5 @@
 {
-	"name": "papertower/wp-rest-api-psr7",
+	"name": "oak-digital/wp-rest-api-psr7",
 	"description": "Provides PSR-7 and WP REST API Response and Request classes",
 	"type": "library",
 	"license": "MIT",
