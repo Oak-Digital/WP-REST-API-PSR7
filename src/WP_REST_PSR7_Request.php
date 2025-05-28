@@ -10,13 +10,14 @@ use Psr\Http\Message\UriInterface;
 
 class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
 {
-    protected $protocol = '1.1';
-    protected $bodyStream;
-    protected $uri;
-    protected $requestTarget;
+    protected string $protocol = '1.1';
+    protected BodyStream|StreamInterface|null $bodyStream;
+    protected RequestUri|UriInterface $uri;
+    protected ?string $requestTarget;
 
-    public static function fromRequest(\WP_REST_Request $request)
+    public static function fromRequest(\WP_REST_Request $request): static
     {
+        /** @phpstan-ignore new.static */
         $psr7_request = new static(
             $request->get_method(),
             $request->get_route(),
@@ -445,7 +446,7 @@ class WP_REST_PSR7_Request extends \WP_REST_Request implements RequestInterface
         return $clone;
     }
 
-    private function updateHostFromUri()
+    private function updateHostFromUri(): void
     {
         $host = $this->uri->getHost();
 

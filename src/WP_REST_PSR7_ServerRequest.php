@@ -8,8 +8,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerRequestInterface
 {
-    protected $serverParams;
-    protected $cookieParams;
+    protected array $serverParams;
+    protected array $cookieParams;
 
     public function __construct($method = '', $route = '', array $attributes = [])
     {
@@ -203,8 +203,7 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
      *                                typically be in an array or object.
      *
      * @return static
-     * @throws \InvalidArgumentException if an unsupported argument type is
-     *     provided.
+     * @throws \InvalidArgumentException if an unsupported argument type is provided.
      */
     public function withParsedBody($data): static
     {
@@ -301,4 +300,3 @@ class WP_REST_PSR7_ServerRequest extends WP_REST_PSR7_Request implements ServerR
         return $clone;
     }
 }
-

@@ -7,13 +7,13 @@ use Psr\Http\Message\StreamInterface;
 
 class BodyStream implements StreamInterface
 {
-    private $stream;
-    private $size;
-    private $seekable;
-    private $readable;
-    private $writable;
-    private $uri;
-    private $customMetadata;
+    private mixed $stream;
+    private mixed $size;
+    private bool $seekable;
+    private bool $readable;
+    private bool $writable;
+    private mixed $uri;
+    private mixed $customMetadata;
 
     /** @var array Hash of readable and writable stream types */
     private static $readWriteHash = [
@@ -93,7 +93,7 @@ class BodyStream implements StreamInterface
         $this->uri = $this->getMetadata('uri');
     }
 
-    public function __get($name)
+    public function __get(string $name): void
     {
         if ($name == 'stream') {
             throw new \RuntimeException('The stream is detached');
@@ -308,4 +308,3 @@ class BodyStream implements StreamInterface
         return isset($meta[$key]) ? $meta[$key] : null;
     }
 }
-

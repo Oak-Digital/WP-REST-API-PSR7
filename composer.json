@@ -26,6 +26,14 @@
 		}
 	},
 	"require-dev": {
-		"php-stubs/wordpress-stubs": "^6.8"
+		"php-stubs/wordpress-stubs": "^6.8",
+		"phpstan/phpstan": "^2.1",
+		"szepeviktor/phpstan-wordpress": "^2.0",
+		"phpstan/extension-installer": "^1.4"
+	},
+	"config": {
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		}
 	}
 }

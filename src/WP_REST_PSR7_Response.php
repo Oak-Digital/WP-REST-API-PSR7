@@ -77,7 +77,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
     protected $protocol = '1.1';
 
     /**
-     * @var BodyStream Stream for the data
+     * @var BodyStream|StreamInterface|null Stream for the data
      */
     protected $bodyStream;
 
@@ -105,7 +105,7 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
     /**
      * Adds the reasonPhrase property to the parent constructor.
      *
-     * @param null  $data
+     * @param string|null  $data
      * @param int   $status
      * @param array $headers
      */
@@ -434,4 +434,3 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
         }
     }
 }
-

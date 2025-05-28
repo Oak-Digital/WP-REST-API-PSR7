@@ -1,0 +1,8 @@
+parameters:
+    level: 6
+    paths:
+        - src
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: throws.unusedType
+        - identifier: missingType.generics
