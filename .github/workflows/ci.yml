@@ -18,4 +18,4 @@ jobs:
       - name: Composer install
         uses: php-actions/composer@v6
       - name: Check code with phpstan
-        uses: php-actions/phpstan@v3
+        run: vendor/bin/phpstan analyze
