@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    types:
+      - synchronize
+      - opened
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Fix git issue
+        run: git config --global --add safe.directory /app
+      - name: Composer install
+        uses: php-actions/composer@v6
+      - name: Check code with phpstan
+        run: vendor/bin/phpstan analyze
