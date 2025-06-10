@@ -95,10 +95,20 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
      */
     public static function fromPSR7Response(ResponseInterface $response)
     {
+        // Since PSR7 response has the headers as an array of arrays,
+        // we need to convert it to a simple associative array
+        $headers = [];
+        $responseHeaders = $response->getHeaders();
+        foreach ($responseHeaders as $name => $values) {
+            // Set the first value as the header value
+            if (isset($values[0])) {
+                $headers[$name] = $values[0];
+            }
+        }
         return new self(
             (string)$response->getBody(),
             $response->getStatusCode(),
-            $response->getHeaders()
+            $headers,
         );
     }
 
