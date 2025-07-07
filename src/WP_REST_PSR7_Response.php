@@ -100,6 +100,10 @@ class WP_REST_PSR7_Response extends \WP_REST_Response implements ResponseInterfa
         $headers = [];
         $responseHeaders = $response->getHeaders();
         foreach ($responseHeaders as $name => $values) {
+            // If for some reason the values is a string, we set it directly
+            if (is_string($values)) {
+                $headers[$name] = $values;
+            }
             // Set the first value as the header value
             if (isset($values[0])) {
                 $headers[$name] = $values[0];
